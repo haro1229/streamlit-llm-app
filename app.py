@@ -3,9 +3,22 @@ import os
 import streamlit as st
 from openai import OpenAI
 
-load_dotenv()
+# ローカル環境用の.env読み込み
+try:
+    load_dotenv()
+except:
+    pass
 
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+# APIキーの取得試行
+api_key = os.environ.get("OPENAI_API_KEY")
+
+# APIキーが設定されているか確認
+if not api_key:
+    st.error("OpenAI APIキーが設定されていません。")
+    st.info("Streamlit Cloudをご利用の場合は、アプリの設定でシークレット'OPENAI_API_KEY'を追加してください。")
+    st.stop()
+
+client = OpenAI(api_key=api_key)
 
 st.title("Lesson21: Streamlitを活用したWebアプリ開発")
 
